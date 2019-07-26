@@ -1,3 +1,4 @@
-PyGPD3303S
-pyserial
-matplotlib
+PyGPD3303S==2.0.0
+pyserial==3.4
+matplotlib==3.1.0
+numpy==1.16.4
