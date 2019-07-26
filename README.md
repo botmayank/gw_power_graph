@@ -1,4 +1,5 @@
-# Graph plotting and power supply control for GW Instek supplies
+# GW Power Graph
+Graph plotting and power supply control for GW Instek supplies using Python
 
 ## Installing dependencies
 ` pip install -r requirements.txt`
@@ -15,3 +16,6 @@ Based on :
 
 Tested with: 
 * GPD-4303S
+## Sample
+![GPD-4303S_demo](/sample/power_supply_demo.gif?raw=true)
+
