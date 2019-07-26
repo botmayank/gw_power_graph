@@ -1,0 +1,3 @@
+PyGPD3303S
+pyserial
+matplotlib
