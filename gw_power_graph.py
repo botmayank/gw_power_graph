@@ -7,7 +7,6 @@ import time
 from datetime import datetime
 import matplotlib.pyplot as plt
 import numpy as np
-import csv
 import os
 
 if not os.path.isdir("logs"):
@@ -54,6 +53,7 @@ combined_reading = []
 
 CSV_HEADER = "Time, Current, Voltage"
 
+
 def psp_plot():
     plt.ion()
 
@@ -91,7 +91,7 @@ def psp_plot():
 
             fig.canvas.draw()
             fig.canvas.flush_events()
-            combined_reading.append([time_samples[-1], current_reading[-1], voltage_reading[-1]])            
+            combined_reading.append([time_samples[-1], current_reading[-1], voltage_reading[-1]])
 
             time_step += SAMPLING_INTERVAL
             time_step = round(time_step, 3)
@@ -102,7 +102,6 @@ def psp_plot():
             print("Exiting...")
             print("Saving final readings to ", CSV_FILE)
             np.savetxt(CSV_FILE, combined_reading, delimiter=", ", fmt="%s", header=CSV_HEADER)
-
 
 
 if __name__ == '__main__':
