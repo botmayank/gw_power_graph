@@ -64,12 +64,15 @@ def psp_plot():
     ax1.set_ylim(0, VOLTAGE_SET + 2)
 
     line1, = ax1.plot(time_samples, voltage_reading)
+    plt.gca().xaxis.grid(True)
 
     ax2 = ax1.twinx()
     ax2.set_ylabel("Current (Amp)", color='tab:red')
     ax2.set_ylim(0, CURRENT_LIMIT + 0.5)
 
     line2, = ax2.plot(time_samples, current_reading, 'r')
+    plt.grid(color='#808080', linestyle='-', linewidth=1, axis='y', alpha=0.5)
+    plt.yticks(np.arange(0, CURRENT_LIMIT + 2, step=0.125))
 
     time_step = 0
 
@@ -86,6 +89,9 @@ def psp_plot():
             line2.set_xdata(time_samples)
             line2.set_ydata(current_reading)
 
+            time_step += SAMPLING_INTERVAL
+            time_step = round(time_step, 3)
+
             ax1.relim()
             ax1.autoscale_view()
 
@@ -93,8 +99,6 @@ def psp_plot():
             fig.canvas.flush_events()
             combined_reading.append([time_samples[-1], current_reading[-1], voltage_reading[-1]])
 
-            time_step += SAMPLING_INTERVAL
-            time_step = round(time_step, 3)
             time.sleep(SAMPLING_INTERVAL)
 
         except KeyboardInterrupt:
