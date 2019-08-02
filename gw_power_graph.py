@@ -27,17 +27,6 @@ gpd = gpd3303s.GPD3303S()
 def init_supply(channel, port):
     gpd.open(port)
 
-    # Switch off power supply output
-    gpd.enableOutput(False)
-    gpd.setVoltage(channel, VOLTAGE_SET)
-    gpd.setCurrent(channel, CURRENT_LIMIT)
-    time.sleep(1)
-
-    # Switch on power supply output
-    gpd.enableBeep(True)
-    gpd.enableOutput(True)
-
-
 def get_voltage_reading(channel):
     return gpd.getVoltageOutput(channel)
 
