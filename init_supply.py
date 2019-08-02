@@ -4,19 +4,9 @@
 
 import gpd3303s
 import time
-from datetime import datetime
-import matplotlib.pyplot as plt
-import numpy as np
-import csv
-import os
 
-if not os.path.isdir("logs"):
-    os.mkdir("logs")
-
-CSV_FILE = "Power_Test.csv"
-
-# PORT = '/dev/ttyUSB0'
-PORT = 'COM12'
+PORT = '/dev/ttyUSB0'
+# PORT = 'COM12'
 
 CHANNEL = 1
 VOLTAGE_SET = 5.01
