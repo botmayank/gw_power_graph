@@ -12,7 +12,7 @@ PORT = None
 if platform.system().lower() == 'linux':
     PORT = '/dev/ttyUSB0'
 elif platform.system().lower() == 'windows':
-    PORT = 'COM3'
+    PORT = 'COM12'
 
 if not PORT:
     raise OSError('Cannot identify system platform. Exiting !!!')

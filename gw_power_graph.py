@@ -11,17 +11,18 @@ import gpd3303s
 import matplotlib.pyplot as plt
 import numpy as np
 
-if not os.path.isdir("logs"):
-    os.mkdir("logs")
-
-CSV_FILE = "logs/Power_Test_" + str(datetime.now()) + ".csv"
-
 PORT = None
+CSV_FILE = "Power_Test_" + str(time.time()) + ".csv"
 
 if platform.system().lower() == 'linux':
+    if not os.path.isdir("logs"):
+        os.mkdir("logs")
     PORT = '/dev/ttyUSB0'
+    CSV_FILE = "logs/" + CSV_FILE
+    
 elif platform.system().lower() == 'windows':
-    PORT = 'COM3'
+    PORT = 'COM12'
+    
 
 CHANNEL = 1
 VOLTAGE_SET = 5.2
