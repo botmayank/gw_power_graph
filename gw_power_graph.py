@@ -24,11 +24,21 @@ elif platform.system().lower() == 'windows':
     PORT = 'COM12'
 
 CHANNEL = 1
-VOLTAGE_SET = 5.01
+VOLTAGE_SET = 5.2
 CURRENT_LIMIT = 1.5
 
 SAMPLING_INTERVAL = 0.05  # Seconds
 gpd = gpd3303s.GPD3303S()
+
+PREV_MEAN = 0
+ALPHA = 0.4
+
+
+def exponential_moving_average(new_value):
+    global PREV_MEAN
+    PREV_MEAN = PREV_MEAN or new_value
+    PREV_MEAN = ALPHA * new_value + (1 - ALPHA) * PREV_MEAN
+    return PREV_MEAN
 
 
 def init_supply(channel, port):
@@ -58,7 +68,7 @@ def psp_plot():
     ax1.set_xlabel("Time")
     ax1.set_ylabel("Voltage (V)", color='tab:blue')
 
-    ax1.set_ylim(0, VOLTAGE_SET + 2)
+    ax1.set_ylim(0, VOLTAGE_SET)
 
     line1, = ax1.plot(time_samples, voltage_reading)
     plt.gca().xaxis.grid(True)
@@ -69,7 +79,13 @@ def psp_plot():
 
     line2, = ax2.plot(time_samples, current_reading, 'r')
     plt.grid(color='#808080', linestyle='-', linewidth=1, axis='y', alpha=0.5)
-    plt.yticks(np.arange(0, CURRENT_LIMIT + 2, step=0.125))
+    plt.yticks(np.arange(0, CURRENT_LIMIT, step=0.125))
+
+    ax3 = ax1.twinx()
+    ax3.set_ylim(0, CURRENT_LIMIT + 0.5)
+
+    plt.grid(color='#808080', linestyle='-', linewidth=1, axis='y', alpha=0.5)
+    plt.yticks(np.arange(0, CURRENT_LIMIT, step=0.125))
 
     time_step = 0
 
@@ -86,11 +102,17 @@ def psp_plot():
             line2.set_xdata(time_samples)
             line2.set_ydata(current_reading)
 
-            time_step += SAMPLING_INTERVAL
-            time_step = round(time_step, 3)
-
             ax1.relim()
             ax1.autoscale_view()
+
+            exponential_moving_average(current_reading[-1])
+            ax3.remove()
+            ax3 = ax1.twinx()
+            ax3.set_ylim(0, CURRENT_LIMIT + 0.5)
+            plt.text(0.9*time_samples[-1], 1.1*PREV_MEAN, 'Avg Current: %s' % round(PREV_MEAN, 3))
+            ax3.hlines(y=PREV_MEAN, xmin=0, xmax=1.05*time_samples[-1], linestyles='dashdot', colors='#F87418')
+            time_step += SAMPLING_INTERVAL
+            time_step = round(time_step, 3)
 
             fig.canvas.draw()
             fig.canvas.flush_events()
