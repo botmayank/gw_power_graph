@@ -21,7 +21,7 @@ PORT = None
 if platform.system().lower() == 'linux':
     PORT = '/dev/ttyUSB0'
 elif platform.system().lower() == 'windows':
-    PORT = 'COM12'
+    PORT = 'COM3'
 
 CHANNEL = 1
 VOLTAGE_SET = 5.2
