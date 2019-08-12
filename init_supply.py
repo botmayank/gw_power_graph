@@ -1,12 +1,21 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 # Power supply control for GW-Instek supplies
 
-import gpd3303s
+import platform
 import time
 
-PORT = '/dev/ttyUSB0'
-# PORT = 'COM12'
+import gpd3303s
+
+PORT = None
+
+if platform.system().lower() == 'linux':
+    PORT = '/dev/ttyUSB0'
+elif platform.system().lower() == 'windows':
+    PORT = 'COM12'
+
+if not PORT:
+    raise OSError('Cannot identify system platform. Exiting !!!')
 
 CHANNEL = 1
 VOLTAGE_SET = 5.01

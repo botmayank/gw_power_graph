@@ -1,20 +1,27 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 # Power supply control for GW-Instek supplies
 
-import gpd3303s
+import os
+import platform
 import time
 from datetime import datetime
+
+import gpd3303s
 import matplotlib.pyplot as plt
 import numpy as np
-import os
 
 if not os.path.isdir("logs"):
     os.mkdir("logs")
 
 CSV_FILE = "logs/Power_Test_" + str(datetime.now()) + ".csv"
 
-PORT = '/dev/ttyUSB0'
+PORT = None
+
+if platform.system().lower() == 'linux':
+    PORT = '/dev/ttyUSB0'
+elif platform.system().lower() == 'windows':
+    PORT = 'COM12'
 
 CHANNEL = 1
 VOLTAGE_SET = 5.01
@@ -26,6 +33,7 @@ gpd = gpd3303s.GPD3303S()
 
 def init_supply(channel, port):
     gpd.open(port)
+
 
 def get_voltage_reading(channel):
     return gpd.getVoltageOutput(channel)
