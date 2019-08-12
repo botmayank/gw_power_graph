@@ -62,7 +62,7 @@ current_reading = []
 time_samples = []
 combined_reading = []
 
-CSV_HEADER = "Time, Voltage, Current"
+CSV_HEADER = "Time, Voltage [V], Current [A], Power [W]"
 
 RUN_LOOP = True
 
@@ -138,7 +138,7 @@ def psp_plot():
 
             fig.canvas.draw()
             fig.canvas.flush_events()
-            combined_reading.append([time_samples[-1], voltage_reading[-1], current_reading[-1]])
+            combined_reading.append([time_samples[-1], voltage_reading[-1], current_reading[-1], current_reading[-1] * voltage_reading[-1] ])
 
             time.sleep(SAMPLING_INTERVAL)
 
