@@ -60,11 +60,20 @@ combined_reading = []
 
 CSV_HEADER = "Time, Current, Voltage"
 
+RUN_LOOP = True
+
+
+def save_data(e):
+    global RUN_LOOP
+    RUN_LOOP = False
+
 
 def psp_plot():
+    global RUN_LOOP
     plt.ion()
 
     fig, ax1 = plt.subplots()
+    fig.canvas.mpl_connect('close_event', save_data)
     ax1.set_xlabel("Time")
     ax1.set_ylabel("Voltage (V)", color='tab:blue')
 
@@ -89,7 +98,7 @@ def psp_plot():
 
     time_step = 0
 
-    while True:
+    while RUN_LOOP:
         try:
             time_samples.append(time_step)
 
@@ -109,8 +118,8 @@ def psp_plot():
             ax3.remove()
             ax3 = ax1.twinx()
             ax3.set_ylim(0, CURRENT_LIMIT + 0.5)
-            plt.text(0.9*time_samples[-1], 1.1*PREV_MEAN, 'Avg Current: %s' % round(PREV_MEAN, 3))
-            ax3.hlines(y=PREV_MEAN, xmin=0, xmax=1.05*time_samples[-1], linestyles='dashdot', colors='#F87418')
+            plt.text(0.9 * time_samples[-1], 1.1 * PREV_MEAN, 'Avg Current: %s' % round(PREV_MEAN, 3))
+            ax3.hlines(y=PREV_MEAN, xmin=0, xmax=1.05 * time_samples[-1], linestyles='dashdot', colors='#F87418')
             time_step += SAMPLING_INTERVAL
             time_step = round(time_step, 3)
 
@@ -121,10 +130,12 @@ def psp_plot():
             time.sleep(SAMPLING_INTERVAL)
 
         except KeyboardInterrupt:
-            gpd.close()
-            print("Exiting...")
-            print("Saving final readings to ", CSV_FILE)
-            np.savetxt(CSV_FILE, combined_reading, delimiter=", ", fmt="%s", header=CSV_HEADER)
+            RUN_LOOP = False
+    plt.close()
+    gpd.close()
+    print("Exiting...")
+    print("Saving final readings to ", CSV_FILE)
+    np.savetxt(CSV_FILE, combined_reading, delimiter=", ", fmt="%s", header=CSV_HEADER)
 
 
 if __name__ == '__main__':
