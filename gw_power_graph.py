@@ -13,12 +13,15 @@ import numpy as np
 
 PORT = None
 CSV_FILE = "Power_Test_" + str(time.time()) + ".csv"
+GRAPH_IMG = "logs/output" + str(time.time()) + ".png"
 
-if platform.system().lower() == 'linux':
-    if not os.path.isdir("logs"):
+if not os.path.isdir("logs"):
         os.mkdir("logs")
-    PORT = '/dev/ttyUSB0'
-    CSV_FILE = "logs/" + CSV_FILE
+
+CSV_FILE = "logs/" + CSV_FILE
+
+if platform.system().lower() == 'linux':   
+    PORT = '/dev/ttyUSB0'   
     
 elif platform.system().lower() == 'windows':
     PORT = 'COM12'
@@ -64,8 +67,17 @@ CSV_HEADER = "Time, Current, Voltage"
 RUN_LOOP = True
 
 
-def save_data(e):
+def save_data(e=None):
     global RUN_LOOP
+    
+    print("Saving graph to ", GRAPH_IMG)
+    plt.savefig(GRAPH_IMG, dpi=400)
+    time.sleep(1)
+    
+    gpd.close()
+    print("Exiting...")
+    print("Saving final readings to ", CSV_FILE)
+    np.savetxt(CSV_FILE, combined_reading, delimiter=", ", fmt="%s", header=CSV_HEADER)
     RUN_LOOP = False
 
 
@@ -132,11 +144,8 @@ def psp_plot():
 
         except KeyboardInterrupt:
             RUN_LOOP = False
-    plt.close()
-    gpd.close()
-    print("Exiting...")
-    print("Saving final readings to ", CSV_FILE)
-    np.savetxt(CSV_FILE, combined_reading, delimiter=", ", fmt="%s", header=CSV_HEADER)
+            save_data()  
+   
 
 
 if __name__ == '__main__':
