@@ -5,7 +5,6 @@
 import os
 import platform
 import time
-from datetime import datetime
 
 import gpd3303s
 import matplotlib.pyplot as plt
@@ -21,7 +20,7 @@ if not os.path.isdir("logs"):
 CSV_FILE = "logs/" + CSV_FILE
 
 if platform.system().lower() == 'linux':   
-    PORT = '/dev/ttyUSB0'   
+    PORT = '/dev/ttyUSB0'
     
 elif platform.system().lower() == 'windows':
     PORT = 'COM12'
@@ -69,15 +68,6 @@ RUN_LOOP = True
 
 def save_data(e=None):
     global RUN_LOOP
-    
-    print("Saving graph to ", GRAPH_IMG)
-    plt.savefig(GRAPH_IMG, dpi=400)
-    time.sleep(1)
-    
-    gpd.close()
-    print("Exiting...")
-    print("Saving final readings to ", CSV_FILE)
-    np.savetxt(CSV_FILE, combined_reading, delimiter=", ", fmt="%s", header=CSV_HEADER)
     RUN_LOOP = False
 
 
@@ -144,8 +134,15 @@ def psp_plot():
 
         except KeyboardInterrupt:
             RUN_LOOP = False
-            save_data()  
-   
+
+    print("Saving graph to ", GRAPH_IMG)
+    fig.savefig(GRAPH_IMG, dpi=400)
+    time.sleep(1)
+
+    gpd.close()
+    print("Exiting...")
+    print("Saving final readings to ", CSV_FILE)
+    np.savetxt(CSV_FILE, combined_reading, delimiter=", ", fmt="%s", header=CSV_HEADER)
 
 
 if __name__ == '__main__':
