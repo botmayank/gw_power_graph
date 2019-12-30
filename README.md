@@ -1,6 +1,9 @@
 # GW Power Graph
 Graph plotting and power supply control for GW Instek supplies using Python
 
+## Installing system dependencies
+sudo apt install python3-tk
+
 ## Installing dependencies
 ` pip install -r requirements.txt`
 

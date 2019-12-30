@@ -15,16 +15,15 @@ CSV_FILE = "Power_Test_" + str(time.time()) + ".csv"
 GRAPH_IMG = "logs/output" + str(time.time()) + ".png"
 
 if not os.path.isdir("logs"):
-        os.mkdir("logs")
+    os.mkdir("logs")
 
 CSV_FILE = "logs/" + CSV_FILE
 
-if platform.system().lower() == 'linux':   
+if platform.system().lower() == 'linux':
     PORT = '/dev/ttyUSB0'
-    
+
 elif platform.system().lower() == 'windows':
     PORT = 'COM12'
-    
 
 CHANNEL = 1
 VOLTAGE_SET = 5.2
@@ -128,7 +127,8 @@ def psp_plot():
 
             fig.canvas.draw()
             fig.canvas.flush_events()
-            combined_reading.append([time_samples[-1], voltage_reading[-1], current_reading[-1], current_reading[-1] * voltage_reading[-1] ])
+            combined_reading.append(
+                [time_samples[-1], voltage_reading[-1], current_reading[-1], current_reading[-1] * voltage_reading[-1]])
 
             time.sleep(SAMPLING_INTERVAL)
 
